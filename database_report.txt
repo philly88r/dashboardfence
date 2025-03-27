@@ -1,0 +1,248 @@
+DATABASE TABLES REPORT
+=====================
+
+Found 13 job_costs tables:
+--------------------------------------------------------------------------------
+Table Name                     Records    Columns    Has Data  
+--------------------------------------------------------------------------------
+job_costs                      77         45         Yes       
+  Key columns: id, invoice_number, invoice_date, customer_name, sales_rep, invoice_total, initial_commission, job_start_date, construction_days, construction_status
+
+job_costs_actual_monthly       0          34         No        
+job_costs_alfred_davis         0          28         No        
+job_costs_cash_flow            83         40         Yes       
+  Key columns: id, invoice_number, customer_name, invoice_total, payment_date, payment_amount, unnamed_5, unnamed_6, invoice_number1, customer_name1
+
+job_costs_income               83         17         Yes       
+  Key columns: id, unnamed_0, unnamed_1, unnamed_2, unnamed_3, unnamed_4, invoice_number, customer_name, invoice_total, payment_date
+
+job_costs_jeff_yates           0          27         No        
+job_costs_parameters           4          10         Yes       
+  Key columns: id, unnamed_0, unnamed_1, price_of_job, job_costs, unnamed_4, unnamed_5, unnamed_6, unnamed_7, unnamed_8
+
+job_costs_paul_vincent         0          27         No        
+job_costs_prediction           2          12         Yes       
+  Key columns: id, prediction, unnamed_1, unnamed_2, unnamed_3, unnamed_4, unnamed_5, unnamed_6, unnamed_7, unnamed_8
+
+job_costs_sales_rep            4          2          Yes       
+  Key columns: id, sales_reps
+
+job_costs_scott_w              0          27         No        
+job_costs_summary              6          16         Yes       
+  Key columns: id, month, start_date, end_date, overhead, percent, support_labour, percent2, total_sales, material_cost
+
+job_costs_tiffany_spoon        0          27         No        
+--------------------------------------------------------------------------------
+
+DETAILED VIEW OF TABLES WITH DATA:
+--------------------------------------------------------------------------------
+
+Table: job_costs (77 records)
+Columns:
+  id (integer)
+  invoice_number (text)
+  invoice_date (date)
+  customer_name (text)
+  sales_rep (text)
+  invoice_total (numeric)
+  initial_commission (text)
+  job_start_date (date)
+  construction_days (text)
+  construction_status (text)
+  material_cost (numeric)
+  percent (numeric)
+  field_labour_cost (numeric)
+  percent2 (numeric)
+  overhead_cost (numeric)
+  support_labour_cost (numeric)
+  net_profit (numeric)
+  commission (text)
+  profit (numeric)
+  payment_status (text)
+  payment_date_1 (date)
+  payment_type_1 (text)
+  paid_amount_1 (numeric)
+  commission_amount_1 (numeric)
+  payment_date_2 (date)
+  payment_type_2 (text)
+  paid_amount_2 (numeric)
+  commission_amount_2 (numeric)
+  payment_date_3 (date)
+  payment_type_3 (text)
+  paid_amount_3 (numeric)
+  commission_amount_3 (numeric)
+  payment_date_4 (date)
+  payment_type_4 (text)
+  paid_amount_4 (numeric)
+  commission_amount_4 (numeric)
+  outstanding_amount (numeric)
+  construction_dates_1 (date)
+  construction_dates_2 (date)
+  construction_dates_3 (date)
+  construction_dates_4 (date)
+  construction_dates_5 (date)
+  construction_dates_6 (date)
+  construction_dates_7 (date)
+  construction_dates_8 (date)
+
+Numeric column statistics:
+  id: Min=1, Max=77, Avg=39.0000000000000000
+  invoice_total: Min=200.00, Max=280000.00, Avg=27064.324675324675
+  material_cost: Min=0.00, Max=NaN, Avg=NaN
+  percent: Min=0.00, Max=1573.00, Avg=57.1818181818181818
+  field_labour_cost: Min=100.00, Max=NaN, Avg=NaN
+--------------------------------------------------------------------------------
+
+Table: job_costs_cash_flow (83 records)
+Columns:
+  id (integer)
+  invoice_number (text)
+  customer_name (text)
+  invoice_total (numeric)
+  payment_date (date)
+  payment_amount (numeric)
+  unnamed_5 (text)
+  unnamed_6 (text)
+  invoice_number1 (text)
+  customer_name1 (text)
+  invoice_total1 (numeric)
+  payment_date1 (date)
+  payment_amount1 (numeric)
+  unnamed_12 (text)
+  start_date (date)
+  end_date (date)
+  number_of_payments (numeric)
+  total_income (numeric)
+  amounts_not_recorded (numeric)
+  unnamed_18 (text)
+  total_expenses_include_owners_draw (numeric)
+  profit__loss_including_owners_draw (numeric)
+  unnamed_21 (numeric)
+  unnamed_22 (text)
+  start_date1 (date)
+  end_date1 (date)
+  number_of_payments1 (numeric)
+  total_income1 (numeric)
+  amounts_not_recorded1 (numeric)
+  total_expenses_include_owners_draw1 (numeric)
+  owners_draw (numeric)
+  profit__loss_excluding_owners_draw (numeric)
+  unnamed_31 (numeric)
+  unnamed_32 (text)
+  inv_no (numeric)
+  name (text)
+  inv_total (numeric)
+  date (date)
+  amount (numeric)
+  type (text)
+
+Numeric column statistics:
+  id: Min=1, Max=83, Avg=42.0000000000000000
+  invoice_total: Min=200.00, Max=280000.00, Avg=37642.066714285714
+  payment_amount: Min=200.00, Max=190000.00, Avg=19616.244714285714
+  invoice_total1: Min=200.00, Max=280000.00, Avg=37642.066714285714
+  payment_amount1: Min=200.00, Max=190000.00, Avg=19616.244714285714
+--------------------------------------------------------------------------------
+
+Table: job_costs_income (83 records)
+Columns:
+  id (integer)
+  unnamed_0 (text)
+  unnamed_1 (text)
+  unnamed_2 (text)
+  unnamed_3 (text)
+  unnamed_4 (text)
+  invoice_number (text)
+  customer_name (text)
+  invoice_total (numeric)
+  payment_date (date)
+  payment_amount (numeric)
+  unnamed_10 (text)
+  invoice_number1 (text)
+  customer_name1 (text)
+  invoice_total1 (numeric)
+  payment_date1 (date)
+  payment_amount1 (numeric)
+
+Numeric column statistics:
+  id: Min=1, Max=83, Avg=42.0000000000000000
+  invoice_total: Min=200.00, Max=280000.00, Avg=37642.066714285714
+  payment_amount: Min=200.00, Max=190000.00, Avg=19616.244714285714
+  invoice_total1: Min=200.00, Max=280000.00, Avg=37642.066714285714
+  payment_amount1: Min=200.00, Max=190000.00, Avg=19616.244714285714
+--------------------------------------------------------------------------------
+
+Table: job_costs_parameters (4 records)
+Columns:
+  id (integer)
+  unnamed_0 (text)
+  unnamed_1 (text)
+  price_of_job (text)
+  job_costs (text)
+  unnamed_4 (text)
+  unnamed_5 (text)
+  unnamed_6 (text)
+  unnamed_7 (text)
+  unnamed_8 (text)
+
+Numeric column statistics:
+  id: Min=1, Max=4, Avg=2.5000000000000000
+--------------------------------------------------------------------------------
+
+Table: job_costs_prediction (2 records)
+Columns:
+  id (integer)
+  prediction (text)
+  unnamed_1 (text)
+  unnamed_2 (text)
+  unnamed_3 (numeric)
+  unnamed_4 (text)
+  unnamed_5 (numeric)
+  unnamed_6 (text)
+  unnamed_7 (text)
+  unnamed_8 (text)
+  unnamed_9 (numeric)
+  unnamed_10 (text)
+
+Numeric column statistics:
+  id: Min=1, Max=2, Avg=1.5000000000000000
+  unnamed_3: Min=91104.00, Max=91104.00, Avg=91104.000000000000
+  unnamed_5: Min=62634.00, Max=62634.00, Avg=62634.000000000000
+  unnamed_9: Min=11388.00, Max=11388.00, Avg=11388.0000000000000000
+--------------------------------------------------------------------------------
+
+Table: job_costs_sales_rep (4 records)
+Columns:
+  id (integer)
+  sales_reps (text)
+
+Numeric column statistics:
+  id: Min=1, Max=4, Avg=2.5000000000000000
+--------------------------------------------------------------------------------
+
+Table: job_costs_summary (6 records)
+Columns:
+  id (integer)
+  month (date)
+  start_date (date)
+  end_date (date)
+  overhead (numeric)
+  percent (numeric)
+  support_labour (numeric)
+  percent2 (numeric)
+  total_sales (numeric)
+  material_cost (numeric)
+  field_labour_cost (numeric)
+  overhead_cost (numeric)
+  support_labour_cost (numeric)
+  commission (numeric)
+  profit (numeric)
+  col_3percent (numeric)
+
+Numeric column statistics:
+  id: Min=1, Max=6, Avg=3.5000000000000000
+  overhead: Min=40000.00, Max=50042.73, Avg=42064.750000000000
+  percent: Min=0.11, Max=0.26, Avg=0.18200000000000000000
+  support_labour: Min=51486.64, Max=60000.00, Avg=58249.765000000000
+  percent2: Min=0.16, Max=0.40, Avg=0.25400000000000000000
+--------------------------------------------------------------------------------

@@ -1,0 +1,545 @@
+invoice_number	customer_name	invoice_total	payment_date	payment_amount	unnamed_5	unnamed_6	invoice_number1	customer_name1	invoice_total1	payment_date1	payment_amount1	unnamed_12	start_date	end_date	number_of_payments	total_income	amounts_not_recorded	unnamed_18	total_expenses_include_owners_draw	profit__loss_including_owners_draw	unnamed_21	unnamed_22	start_date1	end_date1	number_of_payments1	total_income1	amounts_not_recorded1	total_expenses_include_owners_draw1	owners_draw	profit__loss_excluding_owners_draw	unnamed_31	unnamed_32	inv_no	name	inv_total	date	amount	type
+C1631	Yorktown ISD - Gerald Nixon (1)	110000.0	2024-09-17	110000.0			C1631	Yorktown ISD - Gerald Nixon (1)	110000.0	2024-09-17	110000.0		2024-01-01	2024-01-31	22.0	99253.0	2200.0	Phillip	106110.19	-9057.190000000002			2024-01-01	2024-01-31	22.0	99253.0	2200.0	106110.19		-9057.190000000002			1399.0	Joe Cruz	2200.0	2024-01-29	2200.0	Cash
+C1644	Yorktown ISD - Gerald Nixon (2)	280000.0	2024-09-17	90000.0			C1644	Yorktown ISD - Gerald Nixon (2)	280000.0	2024-09-17	90000.0		2024-02-01	2024-02-29	36.0	271668.0	49975.0	STFS	261339.55	-39646.54999999999			2024-02-01	2024-02-29	36.0	271668.0	49975.0	261339.55	8930.5	-30716.04999999999			1414.0	Yolanda & Rodney Boerm	23000.0	2024-03-04	23000.0	Cash
+C1663	Yorktown ISD - Gerald Nixon (3)	145000.0	2024-10-08	10000.0			C1594	John Schuerger - Thrash Construction	10285.0	2024-12-30	9770.75		2024-03-01	2024-03-31	30.0	195715.0	23000.0	Phillip	185722.43	-13007.429999999993			2024-03-01	2024-03-31	30.0	195715.0	23000.0	185722.43	7582.1	-5425.329999999993			1483.0	Phyllis Foulds	15232.0	2024-04-15	7616.0	Cash
+C1644	Yorktown ISD - Gerald Nixon (2)	280000.0	2024-10-08	190000.0			1551	PLPS (Jim Wyman)	30480.0	2024-10-22	15000.0		2024-04-01	2024-04-30	36.0	301432.5	7616.0	Phillip	283168.8	10647.700000000012			2024-04-01	2024-04-30	36.0	301432.5	7616.0	283168.8	18100.0	28747.70000000001			1498.0	Bobby Trevino	7539.0	2024-05-23	3540.0	Cash
+1551	PLPS (Jim Wyman)	30480.0	2024-10-22	15000.0			C1543	Walmart #6930-001 - Cypress, TX (1)	19870.0	2024-12-17	19870.0		2024-05-01	2024-05-31	37.0	223725.0	3540.0	Phillip	218178.84	2006.1600000000035			2024-05-01	2024-05-31	37.0	223725.0	3540.0	218178.84	20020.0	22026.160000000003			1514.0	Pearl Homes	8725.0	2024-06-18	8725.0	Cash
+C1663	Yorktown ISD - Gerald Nixon (3)	145000.0	2024-10-30	90000.0			C1663	Yorktown ISD - Gerald Nixon (3)	145000.0	2024-10-08	10000.0		2024-06-01	2024-06-30	30.0	253085.5	10525.0	Phillip	330785.59	-88225.09000000003			2024-06-01	2024-06-30	30.0	253085.5	10525.0	330785.59	12155.5	-76069.59000000003			1555.0	David Cole	1800.0	2024-06-28	1800.0	Zelle
+C1671	Industrial Projects & Services - Rusty Beals	29695.0	2024-11-08	14250.0			C1671	Industrial Projects & Services - Rusty Beals	29695.0	2024-11-08	14250.0		2024-07-01	2024-07-31	41.0	259437.4	5700.0	Phillip	257586.2	-3848.8000000000175			2024-07-01	2024-07-31	41.0	259437.4	5700.0	257586.2	32095.19	28246.38999999998			1560.0	Mykala	700.0	2024-07-03	700.0	Cash
+1679	John Eisman	17575.0	2024-11-21	7575.0			C1543	Walmart #6930-001 - Cypress, TX (2)	13246.666666666666	2024-12-17	13246.666666666666		2024-08-01	2024-08-31	41.0	304016.0	8750.0	STFS	240432.88	54833.119999999995			2024-08-01	2024-08-31	41.0	304016.0	8750.0	240432.88	9618.52	64451.64			1565.0	Daniel Gay	8885.0	2024-07-10	5000.0	Cash
+1680	Yorktown ISD - Gerald Nixon (4)	120000.0	2024-11-22	55000.0			1680	Yorktown ISD - Gerald Nixon (4)	120000.0	2024-11-22	55000.0		2024-09-01	2024-09-30	26.0	326007.5			264256.31	61751.19			2024-09-01	2024-09-30	26.0	326007.5		264256.31	13937.34	75688.53								
+C1663	Yorktown ISD - Gerald Nixon (3)	145000.0	2024-11-22	45000.0			C1543	Walmart #6930-001 - Cypress, TX (3)	13246.666666666666	2024-12-17	13246.666666666666		2024-10-01	2024-10-31	28.0	443314.52			376402.94	66911.58000000002			2024-10-01	2024-10-31	28.0	443314.52		376402.94	79042.52	145954.10000000003								
+C1543	Walmart #6930-001 - Cypress, TX (1)	19870.0	2024-12-17	19870.0			C1700	Positively Batteries - Michael Wright	1600.0	2025-01-03	1600.0		2024-11-01	2024-11-30	30.0	280157.5			381552.14	-101394.64000000001			2024-11-01	2024-11-30	30.0	280157.5		381552.14	56183.75	-45210.890000000014								
+C1543	Walmart #6930-001 - Cypress, TX (2)	13246.666666666666	2024-12-17	13246.666666666666			C1682	Lester Contracting	109650.0	2025-02-24	98685.0		2024-12-01	2024-12-31	20.0	259031.12333333335			186339.88	72691.24333333335			2024-12-01	2024-12-31	20.0	259031.12333333335		186339.88	13035.99	85727.23333333335								
+C1543	Walmart #6930-001 - Cypress, TX (3)	13246.666666666666	2024-12-17	13246.666666666666			1693	Abby Gonzales	6775.0	2025-01-17	5000.0		2025-01-01	2025-01-31	16.0	143593.0							2025-01-01	2025-01-31	16.0	143593.0												
+C1543	Walmart #6930-001 - Cypress, TX (4)	26493.333333333332	2024-12-17	19313.04			1702	Sam Jarrett	1800.0	2025-01-17	1800.0		2025-02-01	2025-02-28	29.0	398498.0							2025-02-01	2025-02-28	29.0	398498.0												
+C1690	Home of Joseph Foundation - Joe Walker	12800.0	2024-12-20	5400.0			1703	Mark Boname #2	960.0	2025-02-27	960.0																											
+1680	Yorktown ISD - Gerald Nixon (4)	120000.0	2024-12-20	65000.0			1701	Norman Kaiser	4375.0	2025-01-15	4375.0																											
+C1594	John Schuerger - Thrash Construction	10285.0	2024-12-30	9770.75			C1690	Home of Joseph Foundation - Joe Walker	12800.0	2024-12-20	5400.0					3758934.0433333335	111306.0		3091875.75	13661.293333333335	0.003634353030897777					3758934.0433333335	111306.0	3091875.75	270701.41000000003	284362.70333333337	0.07564982520447933							
+C1694	Pete Dlugosch	42823.0	2024-12-30	30096.0			1699	Tabatha Chastain	6075.0	2025-01-17	6075.0																											
+C1700	Positively Batteries - Michael Wright	1600.0	2025-01-03	1600.0			C1717	Yorktown ISD - Gerald Nixon (5)	83630.0	2025-01-31	74930.0																											
+1701	Norman Kaiser	4375.0	2025-01-15	4375.0			1711	Paul Cohen	950.0	2025-01-23	950.0																											
+1693	Abby Gonzales	6775.0	2025-01-17	5000.0			1704	Anne Carroll	4200.0	2025-02-03	4200.0																											
+1702	Sam Jarrett	1800.0	2025-01-17	1800.0			C1694	Pete Dlugosch	42823.0	2024-12-30	30096.0																											
+1699	Tabatha Chastain	6075.0	2025-01-17	6075.0			1705	Eva Corrigan	2375.0	2025-01-27	2375.0																											
+1711	Paul Cohen	950.0	2025-01-23	950.0			C1543	Walmart #6930-001 - Cypress, TX (4)	26493.333333333332	2024-12-17	19313.04																											
+1705	Eva Corrigan	2375.0	2025-01-27	2375.0			C1706	First Baptist Church - Port Lavaca	9200.0	2025-01-29	9200.0																											
+C1690	Home of Joseph Foundation - Joe Walker	12800.0	2025-01-27	7400.0			1714	Dr. Terry McClendon	2815.0	2025-01-29	2815.0																											
+C1706	First Baptist Church - Port Lavaca	9200.0	2025-01-29	9200.0			C1710	Bubba Frick, Matagorda County Heffelfinger Park	30790.0	2025-02-10	30790.0																											
+1714	Dr. Terry McClendon	2815.0	2025-01-29	2815.0			1679	John Eisman	17575.0	2024-11-21	7575.0																											
+1720	Mary Kahlich	5250.0	2025-01-29	5250.0			C1707	Victoria County - Mac Villa	3200.0	2025-02-27	3200.0																											
+C1717	Yorktown ISD - Gerald Nixon (5)	83630.0	2025-01-31	74930.0			C1708	Victoria County - Mac Villa	1800.0	2025-02-27	1800.0																											
+1704	Anne Carroll	4200.0	2025-02-03	4200.0			C1709	Victoria County - Mac Villa	1200.0	2025-02-27	1200.0																											
+1693	Abby Gonzales	6775.0	2025-02-05	1775.0			C1726	Bubba Frick, Commissioner Precinct 4 Matagorda County	1960.0	2025-02-19	1960.0																											
+C1671	Industrial Projects & Services - Rusty Beals	29695.0	2025-02-06	14250.0			C1712	Nordheim ISD - Kevin Wilson	51090.0	2025-02-13	51090.0																											
+1722	Anne Burt	11975.0	2025-02-07	5250.0			C1724	GAL REALITY INC (SCAM) + Charles Range	200.0	2025-02-14	200.0																											
+1679	John Eisman	17575.0	2025-02-07	10000.0			1719	Rudy Lozano	2925.0	2025-02-18	2925.0																											
+C1710	Bubba Frick, Matagorda County Heffelfinger Park	30790.0	2025-02-10	30790.0			1729	Marjorie Peters	1650.0	2025-02-18	1650.0																											
+1721	Rick Mata	19795.0	2025-02-10	10000.0			1734	Paul Cohen	32800.0	2025-02-19	16400.0																											
+C1717	Yorktown ISD - Gerald Nixon (5)	83630.0	2025-02-10	700.0			C1731	Crown Hospice - Jeff	650.0	2025-03-13	650.0																											
+C1712	Nordheim ISD - Kevin Wilson	51090.0	2025-02-13	51090.0			1736	Laurie O'Connor	2788.0	2025-02-25	2788.0																											
+1732	Chris Wall	11842.0	2025-02-13	5921.0			1692	Nadia Guzman	6564.0	2025-02-25	3000.0																											
+C1724	GAL REALITY INC (SCAM) + Charles Range	200.0	2025-02-14	200.0			1720	Mary Kahlich	5250.0	2025-01-29	5250.0																											
+1719	Rudy Lozano	2925.0	2025-02-18	2925.0			1722	Anne Burt	11975.0	2025-02-07	5250.0																											
+1729	Marjorie Peters	1650.0	2025-02-18	1650.0			C1740	Pete Dlugosch	33756.0	2025-03-05	20253.5																											
+1735	Donna Bailey	25930.0	2025-02-18	13000.0			1746	Carolyn Seifert	1869.0	2025-03-12	1869.0																											
+C1726	Bubba Frick, Commissioner Precinct 4 Matagorda County	1960.0	2025-02-19	1960.0			1742	Janet Capek	1000.0	2025-03-10	1000.0																											
+1734	Paul Cohen	32800.0	2025-02-19	16400.0			1743	Charles Hausmann	2600.0	2025-03-10	2600.0																											
+C1694	Pete Dlugosch	42823.0	2025-02-21	12727.0			1744	Adam Besio	2228.0	2025-03-17	2228.0																											
+C1682	Lester Contracting	109650.0	2025-02-24	98685.0			1745	Randall Podsim	3556.0	2025-03-17	3556.0																											
+1738	Jeffery Bonorden	30725.0	2025-02-24	15362.5			1749	Bob Mangum	2000.0	2025-03-12	2000.0																											
+C1739	Clyde Sommerlatte, 2 Bar C Ranch	145730.0	2025-02-24	45000.0			1751	Bill Bishop	4200.0	2025-03-14	4200.0																											
+C1739	Clyde Sommerlatte, 2 Bar C Ranch	145730.0	2025-02-24	27865.0			1756	Joan Rankin	9000.0	2025-03-17	3800.0																											
+1736	Laurie O'Connor	2788.0	2025-02-25	2788.0			1721	Rick Mata	19795.0	2025-02-10	10000.0																											
+1692	Nadia Guzman	6564.0	2025-02-25	3000.0			1730	David Baker	11560.0	2025-03-03	5780.0																											
+1703	Mark Boname #2	960.0	2025-02-27	960.0			1732	Chris Wall	11842.0	2025-02-13	5921.0																											
+C1707	Victoria County - Mac Villa	3200.0	2025-02-27	3200.0			1735	Donna Bailey	25930.0	2025-02-18	13000.0																											
+C1708	Victoria County - Mac Villa	1800.0	2025-02-27	1800.0			1738	Jeffery Bonorden	30725.0	2025-02-24	15362.5																											
+C1709	Victoria County - Mac Villa	1200.0	2025-02-27	1200.0			C1739	Clyde Sommerlatte, 2 Bar C Ranch	145730.0	2025-02-24	45000.0																											
+1734	Paul Cohen	32800.0	2025-02-28	14400.0																																		
+1730	David Baker	11560.0	2025-03-03	5780.0																																		
+1692	Nadia Guzman	6564.0	2025-03-04	3564.0																																		
+C1740	Pete Dlugosch	33756.0	2025-03-05	20253.5																																		
+1742	Janet Capek	1000.0	2025-03-10	1000.0																																		
+1743	Charles Hausmann	2600.0	2025-03-10	2600.0																																		
+1746	Carolyn Seifert	1869.0	2025-03-12	1869.0																																		
+1749	Bob Mangum	2000.0	2025-03-12	2000.0																																		
+C1731	Crown Hospice - Jeff	650.0	2025-03-13	650.0																																		
+1751	Bill Bishop	4200.0	2025-03-14	4200.0																																		
+1744	Adam Besio	2228.0	2025-03-17	2228.0																																		
+1745	Randall Podsim	3556.0	2025-03-17	3556.0																																		
+1756	Joan Rankin	9000.0	2025-03-17	3800.0																																		
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+							C1644	Yorktown ISD - Gerald Nixon (2)	280000.0	2024-10-08	190000.0																											
+							C1663	Yorktown ISD - Gerald Nixon (3)	145000.0	2024-10-30	90000.0																											
+							C1671	Industrial Projects & Services - Rusty Beals	29695.0	2025-02-06	14250.0																											
+							1680	Yorktown ISD - Gerald Nixon (4)	120000.0	2024-12-20	65000.0																											
+							1693	Abby Gonzales	6775.0	2025-02-05	1775.0																											
+							C1690	Home of Joseph Foundation - Joe Walker	12800.0	2025-01-27	7400.0																											
+							C1717	Yorktown ISD - Gerald Nixon (5)	83630.0	2025-02-10	700.0																											
+							C1694	Pete Dlugosch	42823.0	2025-02-21	12727.0																											
+							1679	John Eisman	17575.0	2025-02-07	10000.0																											
+							1734	Paul Cohen	32800.0	2025-02-28	14400.0																											
+							1692	Nadia Guzman	6564.0	2025-03-04	3564.0																											
+							C1739	Clyde Sommerlatte, 2 Bar C Ranch	145730.0	2025-02-24	27865.0																											
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+																																						
+							C1663	Yorktown ISD - Gerald Nixon (3)	145000.0	2024-11-22	45000.0																											
