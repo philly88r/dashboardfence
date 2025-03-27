@@ -7,6 +7,11 @@ let allTables = [];
 let tableData = {};
 let currentSection = 'overview';
 
+// API base URL - change based on environment
+const API_BASE_URL = window.location.hostname === 'localhost' 
+    ? '' // Empty for local development
+    : 'https://dashboardfence.netlify.app'; // Your Netlify URL
+
 // DOM elements
 const loadingElement = document.getElementById('loading');
 const overviewSection = document.getElementById('overview-section');
@@ -51,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Fetch available tables from the API
 async function fetchTables() {
-    const response = await fetch('/api/tables');
+    const response = await fetch(`${API_BASE_URL}/api/tables`);
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -86,7 +91,7 @@ function formatTableName(tableName) {
 // Fetch data for overview section
 async function fetchOverviewData() {
     // Fetch main job costs data
-    const response = await fetch(`/api/data/job_costs?limit=1000`);
+    const response = await fetch(`${API_BASE_URL}/api/data/job_costs?limit=1000`);
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -306,7 +311,7 @@ function createMonthlyRevenueChart(data) {
 // Fetch data for a specific table
 async function fetchTableData(table, page = 0, limit = pageSize) {
     const offset = page * limit;
-    const response = await fetch(`/api/data/${table}?limit=${limit}&offset=${offset}`);
+    const response = await fetch(`${API_BASE_URL}/api/data/${table}?limit=${limit}&offset=${offset}`);
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -325,7 +330,7 @@ async function fetchTableData(table, page = 0, limit = pageSize) {
     nextPageButton.disabled = end >= totalRecords;
     
     // Fetch columns for the table
-    const columnsResponse = await fetch(`/api/columns/${table}`);
+    const columnsResponse = await fetch(`${API_BASE_URL}/api/columns/${table}`);
     if (!columnsResponse.ok) {
         throw new Error(`HTTP error! status: ${columnsResponse.status}`);
     }
