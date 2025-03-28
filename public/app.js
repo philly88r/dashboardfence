@@ -8,7 +8,7 @@ let tableData = {};
 let currentSection = 'overview';
 
 // API base URL - change based on environment
-const API_BASE_URL = '/.netlify/functions/api';
+const API_BASE_URL = '/api';
 
 // DOM elements
 const loadingElement = document.getElementById('loading');
