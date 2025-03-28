@@ -67,13 +67,11 @@ exports.handler = async function(event, context) {
         };
       }
       
-      // Filter tables to only include job_costs tables
-      const jobCostsTables = data.filter(table => table.startsWith('job_costs'));
-      
+      // Return all tables, not just job_costs tables
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify(jobCostsTables)
+        body: JSON.stringify(data)
       };
     }
 
