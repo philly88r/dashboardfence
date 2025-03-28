@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Costs Dashboard - Direct Connection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { padding-top: 20px; }
+        .table-container { overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Job Costs Dashboard - Direct Connection</h1>
+        
+        <div id="loading" class="alert alert-info">Loading data...</div>
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Tables</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul id="tables-list" class="list-group">
+                            <!-- Tables will be listed here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 id="current-table-header">Select a table</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="table table-striped">
+                                <thead id="table-header">
+                                    <!-- Table headers will go here -->
+                                </thead>
+                                <tbody id="table-body">
+                                    <!-- Table data will go here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase client
+        const supabaseUrl = 'https://kdhwrlhzevzekoanusbs.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkaHdybGh6ZXZ6ZWtvYW51c2JzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc1NTczNDUsImV4cCI6MjA1MzEzMzM0NX0.qAA2en6uQPoTDq9oivjfSHajQjY6VKFQ2ymtwgJAyx8';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // DOM elements
+        const loadingElement = document.getElementById('loading');
+        const tablesList = document.getElementById('tables-list');
+        const currentTableHeader = document.getElementById('current-table-header');
+        const tableHeader = document.getElementById('table-header');
+        const tableBody = document.getElementById('table-body');
+
+        // Hardcoded tables
+        const tables = [
+            'job_costs',
+            'job_costs_summary',
+            'job_costs_paul_vincent',
+            'job_costs_scott_w'
+        ];
+
+        // Initialize the dashboard
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Populate tables list
+                populateTablesList();
+                
+                // Hide loading indicator
+                loadingElement.classList.add('d-none');
+            } catch (error) {
+                console.error('Error initializing dashboard:', error);
+                loadingElement.innerHTML = `<div class="alert alert-danger">Error loading dashboard data: ${error.message}</div>`;
+            }
+        });
+
+        // Populate tables list
+        function populateTablesList() {
+            tablesList.innerHTML = '';
+            
+            tables.forEach(table => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.textContent = formatTableName(table);
+                li.style.cursor = 'pointer';
+                
+                li.addEventListener('click', () => {
+                    fetchTableData(table);
+                });
+                
+                tablesList.appendChild(li);
+            });
+        }
+
+        // Format table name for display
+        function formatTableName(tableName) {
+            return tableName
+                .replace('job_costs_', '')
+                .replace('_', ' ')
+                .replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        // Fetch table data
+        async function fetchTableData(tableName) {
+            try {
+                loadingElement.textContent = `Loading data for ${formatTableName(tableName)}...`;
+                loadingElement.classList.remove('d-none');
+                
+                // Update current table header
+                currentTableHeader.textContent = formatTableName(tableName);
+                
+                // Fetch data from Supabase
+                const { data, error } = await supabase
+                    .from(tableName)
+                    .select('*')
+                    .limit(100);
+                
+                if (error) throw error;
+                
+                // Display the data
+                displayTableData(data);
+                
+                // Hide loading indicator
+                loadingElement.classList.add('d-none');
+            } catch (error) {
+                console.error(`Error fetching data for ${tableName}:`, error);
+                loadingElement.innerHTML = `<div class="alert alert-danger">Error loading data: ${error.message}</div>`;
+            }
+        }
+
+        // Display table data
+        function displayTableData(data) {
+            if (!data || data.length === 0) {
+                tableHeader.innerHTML = '<tr><th>No data available</th></tr>';
+                tableBody.innerHTML = '';
+                return;
+            }
+            
+            // Get columns from the first row
+            const columns = Object.keys(data[0]);
+            
+            // Create table header
+            tableHeader.innerHTML = `<tr>${columns.map(col => `<th>${col}</th>`).join('')}</tr>`;
+            
+            // Create table rows
+            tableBody.innerHTML = data.map(row => {
+                return `<tr>${columns.map(col => `<td>${formatValue(row[col])}</td>`).join('')}</tr>`;
+            }).join('');
+        }
+
+        // Format value for display
+        function formatValue(value) {
+            if (value === null || value === undefined) return '';
+            if (typeof value === 'object') return JSON.stringify(value);
+            return value;
+        }
+    </script>
+</body>
+</html>
