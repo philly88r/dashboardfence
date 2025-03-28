@@ -1,8 +1,12 @@
 import psycopg2
 import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Database connection parameters
-conn_string = "postgresql://postgres:Yitbos88@db.kdhwrlhzevzekoanusbs.supabase.co:5432/postgres"
+conn_string = os.getenv("DATABASE_URL")
 
 def list_all_tables():
     """List all tables in the PostgreSQL database"""

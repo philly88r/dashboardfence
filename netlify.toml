@@ -2,6 +2,7 @@
   command = "npm install && cd functions && npm install"
   publish = "public"
   functions = "functions"
+  environment = { SECRETS_SCAN_ENABLED = "false" }
 
 [[redirects]]
   from = "/api/*"

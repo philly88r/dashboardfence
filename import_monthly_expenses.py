@@ -9,7 +9,7 @@ import re
 load_dotenv()
 
 # Database connection parameters
-conn_string = os.getenv("DATABASE_URL") or "postgresql://postgres:Yitbos88@db.kdhwrlhzevzekoanusbs.supabase.co:5432/postgres"
+conn_string = os.getenv("DATABASE_URL")
 
 def clean_column_name(name):
     """Clean column name to be SQL-safe"""

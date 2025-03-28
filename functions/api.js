@@ -8,7 +8,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Initialize PostgreSQL connection pool
 const pgPool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:Yitbos88@db.kdhwrlhzevzekoanusbs.supabase.co:5432/postgres'
+  connectionString: process.env.DATABASE_URL
 });
 
 exports.handler = async function(event, context) {

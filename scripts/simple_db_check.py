@@ -1,8 +1,13 @@
 import psycopg2
+import os
+from dotenv import load_dotenv
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from scripts.env_config import get_db_connection_string
 
 def check_database_tables():
-    # Direct connection string
-    connection_string = "postgresql://postgres:Yitbos88@db.kdhwrlhzevzekoanusbs.supabase.co:5432/postgres"
+    # Get database connection string from environment
+    connection_string = get_db_connection_string()
     
     try:
         # Connect to database
