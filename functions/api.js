@@ -1,9 +1,15 @@
 const { createClient } = require('@supabase/supabase-js');
+const { Pool } = require('pg');
 
 // Initialize Supabase client
 const supabaseUrl = 'https://kdhwrlhzevzekoanusbs.supabase.co';
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Initialize PostgreSQL connection pool
+const pgPool = new Pool({
+  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:Yitbos88@db.kdhwrlhzevzekoanusbs.supabase.co:5432/postgres'
+});
 
 exports.handler = async function(event, context) {
   // Enable CORS
@@ -27,7 +33,8 @@ exports.handler = async function(event, context) {
   console.log('Request event:', {
     path: event.path,
     httpMethod: event.httpMethod,
-    hasKey: !!process.env.SUPABASE_ANON_KEY
+    hasKey: !!process.env.SUPABASE_ANON_KEY,
+    hasDbUrl: !!process.env.DATABASE_URL
   });
   
   try {
@@ -44,92 +51,32 @@ exports.handler = async function(event, context) {
     // Handle /tables endpoint
     if (path === 'tables' || path === '') {
       try {
-        // Try to query all tables
-        const { data, error } = await supabase.rpc('get_all_tables');
+        // Use direct PostgreSQL connection to get all tables
+        const client = await pgPool.connect();
+        const result = await client.query(`
+          SELECT 
+            table_name
+          FROM 
+            information_schema.tables
+          WHERE 
+            table_schema = 'public'
+          ORDER BY 
+            table_name;
+        `);
+        client.release();
         
-        if (error) {
-          console.error('Error fetching tables:', error);
-          // If RPC fails, try a direct query
-          const { data: tables, error: tablesError } = await supabase
-            .from('pg_tables')
-            .select('tablename')
-            .eq('schemaname', 'public');
-          
-          if (tablesError) {
-            console.error('Error fetching tables directly:', tablesError);
-            // Return a comprehensive hardcoded list as fallback
-            return {
-              statusCode: 200,
-              headers,
-              body: JSON.stringify([
-                'calendar_sync_tokens',
-                'categories',
-                'chainlink_products',
-                'customer_appointments',
-                'customer_files',
-                'customer_notes',
-                'customer_projects',
-                'customers',
-                'estimate_calculator_inputs',
-                'estimate_fence_materials',
-                'estimate_line_items',
-                'estimates',
-                'events',
-                'feedback',
-                'formula_products',
-                'google_calendar_tokens',
-                'job_cost',
-                'job_costs',
-                'job_costs_actual_monthly',
-                'job_costs_cash_flow',
-                'job_costs_income',
-                'job_costs_jeff_yates',
-                'job_costs_parameters',
-                'job_costs_paul_vincent',
-                'job_costs_prediction',
-                'job_costs_sales_rep',
-                'job_costs_scott_w',
-                'job_costs_summary',
-                'material_formulas',
-                'materials',
-                'message_history',
-                'monthly_job_cost',
-                'monthly_job_cost_view',
-                'post_heights',
-                'price_book_products',
-                'price_list',
-                'product_details',
-                'products',
-                'project_files',
-                'project_tasks',
-                'project_updates',
-                'questionnaire',
-                'sales_activities',
-                'user_customers',
-                'vendor_categories',
-                'vendors'
-              ])
-            };
-          }
-          
-          // Extract table names
-          const tableNames = tables.map(row => row.tablename);
-          return {
-            statusCode: 200,
-            headers,
-            body: JSON.stringify(tableNames)
-          };
-        }
+        // Extract table names
+        const tables = result.rows.map(row => row.table_name);
         
-        // Return the data from the RPC call
         return {
           statusCode: 200,
           headers,
-          body: JSON.stringify(data)
+          body: JSON.stringify(tables)
         };
-      } catch (error) {
-        console.error('Error in /tables endpoint:', error);
-        // Return a comprehensive hardcoded list as fallback
+      } catch (pgError) {
+        console.error('Error querying PostgreSQL directly:', pgError);
+        
+        // Fallback to hardcoded list of all tables
         return {
           statusCode: 200,
           headers,
@@ -189,62 +136,134 @@ exports.handler = async function(event, context) {
     if (path.startsWith('data/')) {
       const table = path.replace('data/', '').split('?')[0];
       
-      const { data, error } = await supabase
-        .from(table)
-        .select('*')
-        .limit(100);
-      
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+      try {
+        // Use direct PostgreSQL connection to get table data
+        const client = await pgPool.connect();
+        const result = await client.query(`
+          SELECT * FROM "${table}" LIMIT 100;
+        `);
+        client.release();
+        
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({
+            data: result.rows,
+            total: result.rows.length
+          })
+        };
+      } catch (pgError) {
+        console.error(`Error querying table ${table} directly:`, pgError);
+        
+        // Fallback to Supabase
+        const { data, error } = await supabase
+          .from(table)
+          .select('*')
+          .limit(100);
+        
+        if (error) {
+          console.error('Supabase error:', error);
+          throw error;
+        }
+        
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({
+            data: data || [],
+            total: (data || []).length
+          })
+        };
       }
-      
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify({
-          data: data || [],
-          total: (data || []).length
-        })
-      };
     }
 
     // Handle /columns/[table] endpoint
     if (path.startsWith('columns/')) {
       const table = path.replace('columns/', '').split('?')[0];
       
-      // Get a sample row to determine columns
-      const { data, error } = await supabase
-        .from(table)
-        .select('*')
-        .limit(1);
-      
-      if (error) {
-        console.error('Error fetching columns:', error);
+      try {
+        // Use direct PostgreSQL connection to get column info
+        const client = await pgPool.connect();
+        const result = await client.query(`
+          SELECT 
+            column_name, 
+            data_type 
+          FROM 
+            information_schema.columns 
+          WHERE 
+            table_schema = 'public' 
+            AND table_name = $1
+          ORDER BY 
+            ordinal_position;
+        `, [table]);
+        client.release();
+        
         return {
           statusCode: 200,
           headers,
-          body: JSON.stringify([
-            { column_name: 'id', data_type: 'integer' },
-            { column_name: 'job_id', data_type: 'text' },
-            { column_name: 'customer', data_type: 'text' },
-            { column_name: 'amount', data_type: 'numeric' },
-            { column_name: 'date', data_type: 'date' }
-          ])
+          body: JSON.stringify(result.rows)
+        };
+      } catch (pgError) {
+        console.error(`Error querying columns for ${table} directly:`, pgError);
+        
+        // Fallback to getting a sample row
+        try {
+          const client = await pgPool.connect();
+          const result = await client.query(`
+            SELECT * FROM "${table}" LIMIT 1;
+          `);
+          client.release();
+          
+          if (result.rows.length > 0) {
+            // Extract columns from the first row
+            const columns = Object.keys(result.rows[0]).map(col => ({
+              column_name: col,
+              data_type: typeof result.rows[0][col]
+            }));
+            
+            return {
+              statusCode: 200,
+              headers,
+              body: JSON.stringify(columns)
+            };
+          }
+        } catch (sampleError) {
+          console.error(`Error getting sample row from ${table}:`, sampleError);
+        }
+        
+        // If all else fails, use Supabase
+        const { data, error } = await supabase
+          .from(table)
+          .select('*')
+          .limit(1);
+        
+        if (error) {
+          console.error('Error fetching columns:', error);
+          return {
+            statusCode: 200,
+            headers,
+            body: JSON.stringify([
+              { column_name: 'id', data_type: 'integer' },
+              { column_name: 'job_id', data_type: 'text' },
+              { column_name: 'customer', data_type: 'text' },
+              { column_name: 'amount', data_type: 'numeric' },
+              { column_name: 'date', data_type: 'date' }
+            ])
+          };
+        }
+        
+        // Extract columns from the first row
+        const columns = Object.keys(data[0] || {}).map(col => ({
+          column_name: col,
+          data_type: typeof data[0][col]
+        }));
+        
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(columns)
         };
       }
-      
-      // Extract columns from the first row
-      const columns = Object.keys(data[0] || {}).map(col => ({
-        column_name: col,
-        data_type: typeof data[0][col]
-      }));
-      
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify(columns)
-      };
     }
 
     return {
