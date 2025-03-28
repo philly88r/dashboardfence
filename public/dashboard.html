@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Costs Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background-color: #4e73df;
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: bold;
+        }
+        .navbar {
+            background-color: #4e73df;
+        }
+        .navbar-brand {
+            color: white;
+            font-weight: bold;
+        }
+        .stat-card {
+            text-align: center;
+            padding: 15px;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4e73df;
+        }
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+        }
+        #tableSelector {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Job Costs Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Select Data Source
+                    </div>
+                    <div class="card-body">
+                        <select id="tableSelector" class="form-select">
+                            <option value="" selected disabled>Select a table</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stat-card">
+                    <div class="stat-value" id="totalProjects">-</div>
+                    <div class="stat-label">Total Projects</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card">
+                    <div class="stat-value" id="totalRevenue">-</div>
+                    <div class="stat-label">Total Revenue</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card">
+                    <div class="stat-value" id="avgProjectValue">-</div>
+                    <div class="stat-label">Avg Project Value</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card">
+                    <div class="stat-value" id="profitMargin">-</div>
+                    <div class="stat-label">Profit Margin</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Revenue by Month
+                    </div>
+                    <div class="card-body">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Cost Breakdown
+                    </div>
+                    <div class="card-body">
+                        <canvas id="costBreakdownChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Project Performance
+                    </div>
+                    <div class="card-body">
+                        <canvas id="projectPerformanceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Data Preview
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="dataTable">
+                                <thead id="tableHead"></thead>
+                                <tbody id="tableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = '/api';
+        let currentTable = '';
+        let tableData = [];
+        let revenueChart, costBreakdownChart, projectPerformanceChart;
+
+        // Initialize charts with empty data
+        function initCharts() {
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: [],
+                        borderColor: '#4e73df',
+                        backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Cost Breakdown Chart
+            const costCtx = document.getElementById('costBreakdownChart').getContext('2d');
+            costBreakdownChart = new Chart(costCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [
+                            '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b',
+                            '#5a5c69', '#858796', '#6f42c1', '#20c9a6', '#fd7e14'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Project Performance Chart
+            const performanceCtx = document.getElementById('projectPerformanceChart').getContext('2d');
+            projectPerformanceChart = new Chart(performanceCtx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Estimated Cost',
+                        data: [],
+                        backgroundColor: 'rgba(78, 115, 223, 0.7)'
+                    }, {
+                        label: 'Actual Cost',
+                        data: [],
+                        backgroundColor: 'rgba(28, 200, 138, 0.7)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fetch tables from API
+        async function fetchTables() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/tables`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const tables = await response.json();
+                
+                const tableSelector = document.getElementById('tableSelector');
+                tables.forEach(table => {
+                    const option = document.createElement('option');
+                    option.value = table;
+                    option.textContent = table;
+                    tableSelector.appendChild(option);
+                });
+                
+                // Add event listener to table selector
+                tableSelector.addEventListener('change', (e) => {
+                    currentTable = e.target.value;
+                    fetchTableData(currentTable);
+                });
+            } catch (error) {
+                console.error('Error fetching tables:', error);
+            }
+        }
+
+        // Fetch data for selected table
+        async function fetchTableData(table) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/data/${table}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                tableData = result.data || [];
+                
+                // Update UI with data
+                updateDataTable(tableData);
+                updateCharts(tableData);
+                updateStats(tableData);
+            } catch (error) {
+                console.error(`Error fetching data for ${table}:`, error);
+            }
+        }
+
+        // Update data table
+        function updateDataTable(data) {
+            if (!data || data.length === 0) {
+                return;
+            }
+            
+            const tableHead = document.getElementById('tableHead');
+            const tableBody = document.getElementById('tableBody');
+            
+            // Clear existing data
+            tableHead.innerHTML = '';
+            tableBody.innerHTML = '';
+            
+            // Create header
+            const headerRow = document.createElement('tr');
+            Object.keys(data[0]).forEach(key => {
+                const th = document.createElement('th');
+                th.textContent = key;
+                headerRow.appendChild(th);
+            });
+            tableHead.appendChild(headerRow);
+            
+            // Create rows
+            data.slice(0, 10).forEach(row => {
+                const tr = document.createElement('tr');
+                Object.values(row).forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value !== null ? value : '';
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // Update charts based on data
+        function updateCharts(data) {
+            if (!data || data.length === 0) {
+                return;
+            }
+            
+            // Attempt to find date and amount fields
+            const dateField = findField(data[0], ['date', 'created_at', 'timestamp']);
+            const amountField = findField(data[0], ['amount', 'cost', 'price', 'value', 'revenue']);
+            const categoryField = findField(data[0], ['category', 'type', 'department', 'group']);
+            const projectField = findField(data[0], ['project', 'job_id', 'id', 'name']);
+            
+            if (dateField && amountField) {
+                updateRevenueChart(data, dateField, amountField);
+            }
+            
+            if (amountField && categoryField) {
+                updateCostBreakdownChart(data, categoryField, amountField);
+            }
+            
+            if (projectField && amountField) {
+                updateProjectPerformanceChart(data, projectField, amountField);
+            }
+        }
+
+        // Find a field in the data that matches one of the possible names
+        function findField(dataRow, possibleNames) {
+            const keys = Object.keys(dataRow);
+            for (const name of possibleNames) {
+                const field = keys.find(key => key.toLowerCase().includes(name));
+                if (field) {
+                    return field;
+                }
+            }
+            return null;
+        }
+
+        // Update revenue chart
+        function updateRevenueChart(data, dateField, amountField) {
+            // Group data by month
+            const monthlyData = {};
+            
+            data.forEach(row => {
+                if (!row[dateField] || !row[amountField]) return;
+                
+                let date;
+                if (typeof row[dateField] === 'string') {
+                    date = new Date(row[dateField]);
+                } else {
+                    return;
+                }
+                
+                if (isNaN(date.getTime())) return;
+                
+                const month = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+                
+                if (!monthlyData[month]) {
+                    monthlyData[month] = 0;
+                }
+                
+                const amount = parseFloat(row[amountField]);
+                if (!isNaN(amount)) {
+                    monthlyData[month] += amount;
+                }
+            });
+            
+            // Sort months
+            const sortedMonths = Object.keys(monthlyData).sort();
+            
+            // Update chart
+            revenueChart.data.labels = sortedMonths;
+            revenueChart.data.datasets[0].data = sortedMonths.map(month => monthlyData[month]);
+            revenueChart.update();
+        }
+
+        // Update cost breakdown chart
+        function updateCostBreakdownChart(data, categoryField, amountField) {
+            // Group data by category
+            const categoryData = {};
+            
+            data.forEach(row => {
+                if (!row[categoryField] || !row[amountField]) return;
+                
+                const category = row[categoryField];
+                
+                if (!categoryData[category]) {
+                    categoryData[category] = 0;
+                }
+                
+                const amount = parseFloat(row[amountField]);
+                if (!isNaN(amount)) {
+                    categoryData[category] += amount;
+                }
+            });
+            
+            // Sort categories by amount
+            const sortedCategories = Object.keys(categoryData)
+                .sort((a, b) => categoryData[b] - categoryData[a])
+                .slice(0, 5); // Top 5 categories
+            
+            // Update chart
+            costBreakdownChart.data.labels = sortedCategories;
+            costBreakdownChart.data.datasets[0].data = sortedCategories.map(category => categoryData[category]);
+            costBreakdownChart.update();
+        }
+
+        // Update project performance chart
+        function updateProjectPerformanceChart(data, projectField, amountField) {
+            // Group data by project
+            const projectData = {};
+            
+            data.forEach(row => {
+                if (!row[projectField] || !row[amountField]) return;
+                
+                const project = row[projectField];
+                
+                if (!projectData[project]) {
+                    projectData[project] = {
+                        actual: 0,
+                        estimated: 0
+                    };
+                }
+                
+                const amount = parseFloat(row[amountField]);
+                if (!isNaN(amount)) {
+                    // Simplified logic - in real data you'd have actual vs estimated fields
+                    if (row['type'] === 'estimated' || row['status'] === 'planned') {
+                        projectData[project].estimated += amount;
+                    } else {
+                        projectData[project].actual += amount;
+                    }
+                }
+            });
+            
+            // Sort projects by actual amount
+            const sortedProjects = Object.keys(projectData)
+                .sort((a, b) => projectData[b].actual - projectData[a].actual)
+                .slice(0, 10); // Top 10 projects
+            
+            // Update chart
+            projectPerformanceChart.data.labels = sortedProjects;
+            projectPerformanceChart.data.datasets[0].data = sortedProjects.map(project => projectData[project].estimated);
+            projectPerformanceChart.data.datasets[1].data = sortedProjects.map(project => projectData[project].actual);
+            projectPerformanceChart.update();
+        }
+
+        // Update stats
+        function updateStats(data) {
+            if (!data || data.length === 0) {
+                return;
+            }
+            
+            const amountField = findField(data[0], ['amount', 'cost', 'price', 'value', 'revenue']);
+            
+            if (amountField) {
+                // Calculate total revenue
+                let totalRevenue = 0;
+                data.forEach(row => {
+                    const amount = parseFloat(row[amountField]);
+                    if (!isNaN(amount)) {
+                        totalRevenue += amount;
+                    }
+                });
+                
+                // Update stats
+                document.getElementById('totalProjects').textContent = data.length;
+                document.getElementById('totalRevenue').textContent = `$${totalRevenue.toLocaleString()}`;
+                document.getElementById('avgProjectValue').textContent = `$${(totalRevenue / data.length).toLocaleString()}`;
+                document.getElementById('profitMargin').textContent = '25%'; // Placeholder
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            fetchTables();
+        });
+    </script>
+</body>
+</html>
