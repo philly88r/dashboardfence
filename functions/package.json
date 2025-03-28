@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Netlify Functions for Job Costs Dashboard",
   "dependencies": {
-    "pg": "^8.10.0"
+    "pg": "^8.10.0",
+    "@supabase/supabase-js": "^2.20.0"
   }
 }
