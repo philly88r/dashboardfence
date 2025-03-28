@@ -23,12 +23,13 @@ exports.handler = async function(event, context) {
     };
   }
 
-  const path = event.path.replace('/.netlify/functions/api/', '');
-  const segments = path.split('/');
-
   try {
-    // Handle different API endpoints
-    if (path === 'tables') {
+    // Get the path without the /.netlify/functions/api prefix
+    const path = event.path.replace('/.netlify/functions/api/', '');
+    console.log('Path:', path); // Debug log
+
+    // Handle /api/tables endpoint
+    if (path === '' || path === 'tables') {
       const query = `
         SELECT table_name 
         FROM information_schema.tables 
@@ -43,8 +44,9 @@ exports.handler = async function(event, context) {
       };
     }
 
-    if (segments[0] === 'data' && segments[1]) {
-      const table = segments[1];
+    // Handle /api/data/[table] endpoint
+    if (path.startsWith('data/')) {
+      const table = path.replace('data/', '');
       // Validate table name to prevent SQL injection
       if (!table.match(/^job_costs[a-z_]*$/)) {
         return {
@@ -62,8 +64,9 @@ exports.handler = async function(event, context) {
       };
     }
 
-    if (segments[0] === 'columns' && segments[1]) {
-      const table = segments[1];
+    // Handle /api/columns/[table] endpoint
+    if (path.startsWith('columns/')) {
+      const table = path.replace('columns/', '');
       // Validate table name to prevent SQL injection
       if (!table.match(/^job_costs[a-z_]*$/)) {
         return {
@@ -86,17 +89,27 @@ exports.handler = async function(event, context) {
       };
     }
 
+    // If no matching route is found
     return {
       statusCode: 404,
       headers,
-      body: JSON.stringify({ error: 'Not Found' })
+      body: JSON.stringify({ 
+        error: 'Not Found',
+        path: path,
+        originalPath: event.path
+      })
     };
+
   } catch (error) {
     console.error('Error:', error);
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ error: 'Internal Server Error' })
+      body: JSON.stringify({ 
+        error: 'Internal Server Error',
+        message: error.message,
+        stack: error.stack
+      })
     };
   }
 };

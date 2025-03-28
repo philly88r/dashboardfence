@@ -8,9 +8,7 @@ let tableData = {};
 let currentSection = 'overview';
 
 // API base URL - change based on environment
-const API_BASE_URL = window.location.hostname === 'localhost' 
-    ? '' // Empty for local development
-    : '/.netlify/functions/api';
+const API_BASE_URL = '/.netlify/functions/api';
 
 // DOM elements
 const loadingElement = document.getElementById('loading');
@@ -34,6 +32,9 @@ const analyticsLink = document.getElementById('analytics-link');
 // Initialize the dashboard
 document.addEventListener('DOMContentLoaded', async () => {
     try {
+        // Show loading indicator
+        loadingElement.classList.remove('d-none');
+        
         // Fetch available tables
         await fetchTables();
         
@@ -50,28 +51,44 @@ document.addEventListener('DOMContentLoaded', async () => {
         showSection('overview');
     } catch (error) {
         console.error('Error initializing dashboard:', error);
-        loadingElement.innerHTML = `<div class="alert alert-danger">Error loading dashboard data. Please try refreshing the page.</div>`;
+        loadingElement.innerHTML = `<div class="alert alert-danger">Error loading dashboard data: ${error.message}</div>`;
     }
 });
 
 // Fetch available tables from the API
 async function fetchTables() {
-    const response = await fetch(`${API_BASE_URL}/tables`);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+        const response = await fetch(`${API_BASE_URL}/tables`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (!Array.isArray(data)) {
+            throw new Error('Invalid response format');
+        }
+        allTables = data;
+        
+        // Clear existing items
+        tablesDropdownMenu.innerHTML = '';
+        
+        // Populate tables dropdown
+        allTables.forEach(table => {
+            const item = document.createElement('a');
+            item.className = 'dropdown-item';
+            item.href = '#';
+            item.textContent = formatTableName(table);
+            item.addEventListener('click', async (e) => {
+                e.preventDefault();
+                currentTable = table;
+                currentPage = 0;
+                await fetchTableData(table);
+            });
+            tablesDropdownMenu.appendChild(item);
+        });
+    } catch (error) {
+        console.error('Error fetching tables:', error);
+        throw error;
     }
-    
-    const tables = await response.json();
-    allTables = tables.map(t => t.table_name);
-    
-    // Populate tables dropdown
-    tablesDropdownMenu.innerHTML = '';
-    allTables.forEach(table => {
-        const displayName = formatTableName(table);
-        const li = document.createElement('li');
-        li.innerHTML = `<a class="dropdown-item" href="#" data-table="${table}">${displayName}</a>`;
-        tablesDropdownMenu.appendChild(li);
-    });
 }
 
 // Format table name for display
