@@ -9,6 +9,7 @@
     "build": "echo 'No build step required - static files are in public directory'"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",

@@ -43,41 +43,106 @@ exports.handler = async function(event, context) {
 
     // Handle /tables endpoint
     if (path === 'tables' || path === '') {
-      // Use a complete hardcoded list of all tables
-      const tables = [
-        'job_costs',
-        'job_costs_summary',
-        'job_costs_paul_vincent',
-        'job_costs_scott_w',
-        'job_costs_all_jobs',
-        'job_costs_all_jobs_summary',
-        'job_costs_all_jobs_by_month',
-        'job_costs_by_customer',
-        'job_costs_by_date',
-        'job_costs_by_sales_rep',
-        'job_costs_by_job_id',
-        'job_costs_by_month',
-        'job_costs_by_year',
-        'job_costs_by_quarter',
-        'job_costs_by_week',
-        'job_costs_by_day',
-        'job_costs_by_category',
-        'job_costs_by_type',
-        'job_costs_by_status',
-        'job_costs_by_region',
-        'job_costs_by_department',
-        'job_costs_by_employee',
-        'job_costs_by_vendor',
-        'job_costs_by_project',
-        'job_costs_by_phase',
-        'job_costs_by_task'
-      ];
-      
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify(tables)
-      };
+      try {
+        // Try to query all tables
+        const { data, error } = await supabase.rpc('get_all_tables');
+        
+        if (error) {
+          console.error('Error fetching tables:', error);
+          // If RPC fails, try a direct query
+          const { data: tables, error: tablesError } = await supabase
+            .from('pg_tables')
+            .select('tablename')
+            .eq('schemaname', 'public');
+          
+          if (tablesError) {
+            console.error('Error fetching tables directly:', tablesError);
+            // Return a comprehensive hardcoded list as fallback
+            return {
+              statusCode: 200,
+              headers,
+              body: JSON.stringify([
+                'job_costs',
+                'job_costs_summary',
+                'job_costs_paul_vincent',
+                'job_costs_scott_w',
+                'job_costs_all_jobs',
+                'job_costs_all_jobs_summary',
+                'job_costs_all_jobs_by_month',
+                'job_costs_by_customer',
+                'job_costs_by_date',
+                'job_costs_by_sales_rep',
+                'job_costs_by_job_id',
+                'job_costs_by_month',
+                'job_costs_by_year',
+                'job_costs_by_quarter',
+                'job_costs_by_week',
+                'job_costs_by_day',
+                'job_costs_by_category',
+                'job_costs_by_type',
+                'job_costs_by_status',
+                'job_costs_by_region',
+                'job_costs_by_department',
+                'job_costs_by_employee',
+                'job_costs_by_vendor',
+                'job_costs_by_project',
+                'job_costs_by_phase',
+                'job_costs_by_task'
+              ])
+            };
+          }
+          
+          // Extract table names
+          const tableNames = tables.map(row => row.tablename);
+          return {
+            statusCode: 200,
+            headers,
+            body: JSON.stringify(tableNames)
+          };
+        }
+        
+        // Return the data from the RPC call
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(data)
+        };
+      } catch (error) {
+        console.error('Error in /tables endpoint:', error);
+        // Return a comprehensive hardcoded list as fallback
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify([
+            'job_costs',
+            'job_costs_summary',
+            'job_costs_paul_vincent',
+            'job_costs_scott_w',
+            'job_costs_all_jobs',
+            'job_costs_all_jobs_summary',
+            'job_costs_all_jobs_by_month',
+            'job_costs_by_customer',
+            'job_costs_by_date',
+            'job_costs_by_sales_rep',
+            'job_costs_by_job_id',
+            'job_costs_by_month',
+            'job_costs_by_year',
+            'job_costs_by_quarter',
+            'job_costs_by_week',
+            'job_costs_by_day',
+            'job_costs_by_category',
+            'job_costs_by_type',
+            'job_costs_by_status',
+            'job_costs_by_region',
+            'job_costs_by_department',
+            'job_costs_by_employee',
+            'job_costs_by_vendor',
+            'job_costs_by_project',
+            'job_costs_by_phase',
+            'job_costs_by_task'
+          ])
+        };
+      }
     }
 
     // Handle /data/[table] endpoint
