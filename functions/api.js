@@ -12,14 +12,6 @@ pool.on('error', (err) => {
 });
 
 exports.handler = async function(event, context) {
-  // Initialize the connection pool
-  // const pool = new Pool({
-  //   connectionString: process.env.DATABASE_URL,
-  //   ssl: {
-  //     rejectUnauthorized: false // Needed for Supabase connections
-  //   }
-  // });
-
   // Enable CORS
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -65,14 +57,26 @@ exports.handler = async function(event, context) {
         };
       }
 
-      const path = event.path.replace('/.netlify/functions/api/', '');
-      console.log('API Request Path:', path);
-
-      let result;
+      // Log request details for debugging
+      console.log('Request event:', {
+        path: event.path,
+        httpMethod: event.httpMethod,
+        hasDatabase: !!process.env.DATABASE_URL
+      });
       
+      // Handle different path formats
+      let path = event.path;
+      if (path.includes('/.netlify/functions/api/')) {
+        path = path.replace('/.netlify/functions/api/', '');
+      } else if (path.includes('/api/')) {
+        path = path.replace('/api/', '');
+      }
+      
+      console.log('Normalized path:', path);
+
       // Handle /tables endpoint
       if (path === 'tables' || path === '') {
-        result = await client.query(`
+        const result = await client.query(`
           SELECT table_name 
           FROM information_schema.tables 
           WHERE table_schema = 'public' 
@@ -95,7 +99,7 @@ exports.handler = async function(event, context) {
             body: JSON.stringify({ error: 'Invalid table name' })
           };
         }
-        result = await client.query(`SELECT * FROM ${table} LIMIT 1000`);
+        const result = await client.query(`SELECT * FROM ${table} LIMIT 1000`);
         return {
           statusCode: 200,
           headers,
@@ -116,7 +120,7 @@ exports.handler = async function(event, context) {
             body: JSON.stringify({ error: 'Invalid table name' })
           };
         }
-        result = await client.query(`
+        const result = await client.query(`
           SELECT column_name, data_type 
           FROM information_schema.columns 
           WHERE table_name = $1 
@@ -135,6 +139,7 @@ exports.handler = async function(event, context) {
         body: JSON.stringify({ 
           error: 'Not Found', 
           path: path,
+          originalPath: event.path,
           event: {
             path: event.path,
             httpMethod: event.httpMethod
