@@ -53,12 +53,40 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
         // Initialize Supabase client
         const supabaseUrl = 'https://kdhwrlhzevzekoanusbs.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtkaHdybGh6ZXZ6ZWtvYW51c2JzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc1NTczNDUsImV4cCI6MjA1MzEzMzM0NX0.qAA2en6uQPoTDq9oivjfSHajQjY6VKFQ2ymtwgJAyx8';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        const supabaseKey = ''; // This will be set via JavaScript
+        let supabase;
+
+        // Function to get the Supabase key from the server
+        async function getSupabaseKey() {
+            try {
+                const response = await fetch('/.netlify/functions/hello');
+                const data = await response.json();
+                if (data.env && data.env.hasSupabaseKey) {
+                    // Initialize Supabase with the key from environment variables
+                    initializeSupabase();
+                    return true;
+                } else {
+                    document.getElementById('loading').innerHTML = 
+                        '<div class="alert alert-danger">Error: Supabase key not available. Please check your environment variables.</div>';
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error fetching Supabase key:', error);
+                document.getElementById('loading').innerHTML = 
+                    `<div class="alert alert-danger">Error connecting to server: ${error.message}</div>`;
+                return false;
+            }
+        }
+
+        // Initialize Supabase client
+        function initializeSupabase() {
+            // For security, we'll use the API endpoint instead of direct Supabase connection
+            console.log('Initializing with API endpoint instead of direct Supabase connection');
+            populateTablesList();
+        }
 
         // DOM elements
         const loadingElement = document.getElementById('loading');
@@ -84,11 +112,8 @@
         // Initialize the dashboard
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                // Populate tables list
-                populateTablesList();
-                
-                // Hide loading indicator
-                loadingElement.classList.add('d-none');
+                // Get the Supabase key from the server
+                await getSupabaseKey();
             } catch (error) {
                 console.error('Error initializing dashboard:', error);
                 loadingElement.innerHTML = `<div class="alert alert-danger">Error loading dashboard data: ${error.message}</div>`;
@@ -130,16 +155,16 @@
                 // Update current table header
                 currentTableHeader.textContent = formatTableName(tableName);
                 
-                // Fetch data from Supabase
-                const { data, error } = await supabase
-                    .from(tableName)
-                    .select('*')
-                    .limit(100);
+                // Fetch data from API instead of direct Supabase
+                const response = await fetch(`/api/data/${tableName}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 
-                if (error) throw error;
+                const result = await response.json();
                 
                 // Display the data
-                displayTableData(data);
+                displayTableData(result.data || []);
                 
                 // Hide loading indicator
                 loadingElement.classList.add('d-none');
