@@ -5,15 +5,15 @@ const supabaseUrl = 'https://kdhwrlhzevzekoanusbs.supabase.co';
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// Enable CORS
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Content-Type': 'application/json'
-};
-
 exports.handler = async function(event, context) {
+  // Enable CORS
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Content-Type': 'application/json'
+  };
+
   // Handle OPTIONS request for CORS
   if (event.httpMethod === 'OPTIONS') {
     return {
@@ -26,7 +26,8 @@ exports.handler = async function(event, context) {
   // Log request details for debugging
   console.log('Request event:', {
     path: event.path,
-    httpMethod: event.httpMethod
+    httpMethod: event.httpMethod,
+    hasKey: !!process.env.SUPABASE_ANON_KEY
   });
   
   try {
@@ -42,18 +43,18 @@ exports.handler = async function(event, context) {
 
     // Handle /tables endpoint
     if (path === 'tables' || path === '') {
-      const { data, error } = await supabase
-        .from('information_schema.tables')
-        .select('table_name')
-        .eq('table_schema', 'public')
-        .like('table_name', 'job_costs%');
-      
-      if (error) throw error;
+      // Use a simple hardcoded list for now to avoid schema query issues
+      const tables = [
+        'job_costs',
+        'job_costs_summary',
+        'job_costs_paul_vincent',
+        'job_costs_scott_w'
+      ];
       
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify(data.map(row => row.table_name))
+        body: JSON.stringify(tables)
       };
     }
 
@@ -68,19 +69,22 @@ exports.handler = async function(event, context) {
         };
       }
       
-      const { data, error, count } = await supabase
+      const { data, error } = await supabase
         .from(table)
-        .select('*', { count: 'exact' })
-        .limit(1000);
+        .select('*')
+        .limit(100);
       
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
       
       return {
         statusCode: 200,
         headers,
         body: JSON.stringify({
-          data: data,
-          total: count || data.length
+          data: data || [],
+          total: (data || []).length
         })
       };
     }
@@ -96,31 +100,17 @@ exports.handler = async function(event, context) {
         };
       }
       
-      // For columns we still need to use a raw query since this is meta info
-      const { data, error } = await supabase.rpc('get_table_columns', { 
-        table_name: table 
-      });
-      
-      if (error) {
-        // Fallback to predefined columns if RPC fails
-        console.log('Error getting columns:', error);
-        return {
-          statusCode: 200,
-          headers,
-          body: JSON.stringify([
-            { column_name: 'id', data_type: 'integer' },
-            { column_name: 'job_id', data_type: 'text' },
-            { column_name: 'customer', data_type: 'text' },
-            { column_name: 'amount', data_type: 'numeric' },
-            { column_name: 'date', data_type: 'date' }
-          ])
-        };
-      }
-      
+      // Use hardcoded columns for now
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify(data)
+        body: JSON.stringify([
+          { column_name: 'id', data_type: 'integer' },
+          { column_name: 'job_id', data_type: 'text' },
+          { column_name: 'customer', data_type: 'text' },
+          { column_name: 'amount', data_type: 'numeric' },
+          { column_name: 'date', data_type: 'date' }
+        ])
       };
     }
 
@@ -142,7 +132,7 @@ exports.handler = async function(event, context) {
       body: JSON.stringify({ 
         error: 'API Error',
         message: error.message,
-        details: error.details
+        details: error.details || 'No additional details'
       })
     };
   }
