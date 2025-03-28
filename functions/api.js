@@ -43,18 +43,37 @@ exports.handler = async function(event, context) {
 
     // Handle /tables endpoint
     if (path === 'tables' || path === '') {
-      // Use a simple hardcoded list for now to avoid schema query issues
-      const tables = [
-        'job_costs',
-        'job_costs_summary',
-        'job_costs_paul_vincent',
-        'job_costs_scott_w'
-      ];
+      // Query all tables that start with job_costs from Supabase
+      const { data, error } = await supabase.rpc('get_all_tables');
+      
+      if (error) {
+        console.error('Error fetching tables:', error);
+        // Fallback to hardcoded tables if the RPC fails
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify([
+            'job_costs',
+            'job_costs_summary',
+            'job_costs_paul_vincent',
+            'job_costs_scott_w',
+            'job_costs_all_jobs',
+            'job_costs_all_jobs_summary',
+            'job_costs_all_jobs_by_month',
+            'job_costs_by_customer',
+            'job_costs_by_date',
+            'job_costs_by_sales_rep'
+          ])
+        };
+      }
+      
+      // Filter tables to only include job_costs tables
+      const jobCostsTables = data.filter(table => table.startsWith('job_costs'));
       
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify(tables)
+        body: JSON.stringify(jobCostsTables)
       };
     }
 
@@ -100,17 +119,50 @@ exports.handler = async function(event, context) {
         };
       }
       
-      // Use hardcoded columns for now
+      // Get columns for the table
+      const { data, error } = await supabase.rpc('get_table_columns', { table_name: table });
+      
+      if (error) {
+        console.error('Error fetching columns:', error);
+        // Fallback to a query that works with public access
+        const { data: fallbackData, error: fallbackError } = await supabase
+          .from(table)
+          .select('*')
+          .limit(1);
+          
+        if (fallbackError) {
+          console.error('Fallback error:', fallbackError);
+          // Use hardcoded columns as a last resort
+          return {
+            statusCode: 200,
+            headers,
+            body: JSON.stringify([
+              { column_name: 'id', data_type: 'integer' },
+              { column_name: 'job_id', data_type: 'text' },
+              { column_name: 'customer', data_type: 'text' },
+              { column_name: 'amount', data_type: 'numeric' },
+              { column_name: 'date', data_type: 'date' }
+            ])
+          };
+        }
+        
+        // Extract columns from the first row
+        const columns = Object.keys(fallbackData[0] || {}).map(col => ({
+          column_name: col,
+          data_type: typeof fallbackData[0][col]
+        }));
+        
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(columns)
+        };
+      }
+      
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify([
-          { column_name: 'id', data_type: 'integer' },
-          { column_name: 'job_id', data_type: 'text' },
-          { column_name: 'customer', data_type: 'text' },
-          { column_name: 'amount', data_type: 'numeric' },
-          { column_name: 'date', data_type: 'date' }
-        ])
+        body: JSON.stringify(data)
       };
     }
 
