@@ -97,16 +97,7 @@
 
         // Hardcoded tables
         const tables = [
-            'job_costs',
-            'job_costs_summary',
-            'job_costs_paul_vincent',
-            'job_costs_scott_w',
-            'job_costs_all_jobs',
-            'job_costs_all_jobs_summary',
-            'job_costs_all_jobs_by_month',
-            'job_costs_by_customer',
-            'job_costs_by_date',
-            'job_costs_by_sales_rep'
+            // We'll fetch all tables dynamically from the API
         ];
 
         // Initialize the dashboard
@@ -124,18 +115,37 @@
         function populateTablesList() {
             tablesList.innerHTML = '';
             
-            tables.forEach(table => {
-                const li = document.createElement('li');
-                li.className = 'list-group-item';
-                li.textContent = formatTableName(table);
-                li.style.cursor = 'pointer';
-                
-                li.addEventListener('click', () => {
-                    fetchTableData(table);
+            // Fetch tables from API
+            fetch('/api/tables')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(tables => {
+                    if (!tables || tables.length === 0) {
+                        tablesList.innerHTML = '<li class="list-group-item">No tables found</li>';
+                        return;
+                    }
+                    
+                    tables.forEach(table => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = formatTableName(table);
+                        li.style.cursor = 'pointer';
+                        
+                        li.addEventListener('click', () => {
+                            fetchTableData(table);
+                        });
+                        
+                        tablesList.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching tables:', error);
+                    tablesList.innerHTML = `<li class="list-group-item text-danger">Error: ${error.message}</li>`;
                 });
-                
-                tablesList.appendChild(li);
-            });
         }
 
         // Format table name for display
